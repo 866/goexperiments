@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  golangci-lint: timakin/golangci-lint@0.1.1
 jobs:
   build:
     working_directory: ~/repo
@@ -16,6 +18,7 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+      - golangci-lint/lint
       - run:
           name: Run tests
           command: go test ./...
