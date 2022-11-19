@@ -10,12 +10,22 @@ jobs:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
+          name: "Print the Go version"
+          command: >
+            go version
+      - run:
           name: Install Dependencies
           command: go get ./...
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+      - run:
+          name: "Staticcheck"
+          command: go install honnef.co/go/tools/cmd/staticcheck@latest && staticcheck ./...
+      - run:
+          name: "Run go vet"
+          command: go vet -v ./...
       - run:
           name: Run tests
           command: go test ./...
